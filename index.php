@@ -2,11 +2,12 @@
 $config = include('config.php');
 if ($handle = opendir($config->memory_items_dir)) {
     while (false !== ($file = readdir($handle))) {
+        $path = $config->memory_items_dir . $file;
         if (
             preg_match(sprintf('~^%s~', $config->mname_prefix), $file)
-            && filectime($file) < (time() - $config->memory_item_ttl)
+            && filectime($path) < (time() - $config->memory_item_ttl)
         ) {
-            unlink($config->memory_items_dir . $file);
+            unlink($path);
         }
     }
 }
