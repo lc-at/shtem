@@ -1,5 +1,15 @@
 <?php
 $config = include('config.php');
+if ($handle = opendir($config->memory_items_dir)) {
+    while (false !== ($file = readdir($handle))) {
+        if (
+            filectime($file) < (time() - $config->memory_item_ttl)
+            && preg_match(sprintf('~^%s~', $config->mname_prefix), $file)
+        ) {
+            unlink($config->memory_items_dir . $file);
+        }
+    }
+}
 if (count($_POST) > 0 || count($_GET) > 1) {
     header('Content-Type: application/json');
     $memory = array_merge($_GET, $_POST);
