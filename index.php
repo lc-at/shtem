@@ -3,8 +3,8 @@ $config = include('config.php');
 if ($handle = opendir($config->memory_items_dir)) {
     while (false !== ($file = readdir($handle))) {
         if (
-            filectime($file) < (time() - $config->memory_item_ttl)
-            && preg_match(sprintf('~^%s~', $config->mname_prefix), $file)
+            preg_match(sprintf('~^%s~', $config->mname_prefix), $file)
+            && filectime($file) < (time() - $config->memory_item_ttl)
         ) {
             unlink($config->memory_items_dir . $file);
         }
