@@ -1,5 +1,6 @@
 <?php
 return (object)array(
+    'base_url'          => '/',
     'memory_item_ttl'   => 120,
     'memory_items_dir'  => sys_get_temp_dir() . DIRECTORY_SEPARATOR,
     'mname_prefix'      => 'shtem_',
