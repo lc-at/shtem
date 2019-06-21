@@ -6,7 +6,7 @@ if (preg_match(sprintf('~^get/([%s]+)$~', $config->mname_valid_chars), $request_
     include 'get.php';
 } elseif (preg_match(sprintf('~^([%s]*)~', $config->mname_valid_chars), $request_uri, $match)) {
     $_GET[$config->mname_param_name] = $match[1];
-    include 'index.php';
+    include 'store.php';
 } else {
     die('404 not found');
 }
