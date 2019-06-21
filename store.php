@@ -11,11 +11,11 @@ if ($handle = opendir($config->memory_items_dir)) {
         }
     }
 }
-if (count($_POST) > 0 || count($_GET) > 1 || count($_FILES) > 0) {
+if (count($_POST) > 0 || count($_GET) > 1 || !empty($_FILES)) {
     header('Content-Type: application/json');
     $memory = array_merge($_GET, $_POST);
     $memory_len = strlen(serialize((array)$memory));
-    if (count($_FILES) > 0) {
+    if (!empty($_FILES)) {
         foreach ($_FILES as $pname => $file) {
             if ($file['error'] == UPLOAD_ERR_OK && $memory_len <= $config->memory_max_len) {
                 $memory_len += $file['size'];
@@ -30,11 +30,12 @@ if (count($_POST) > 0 || count($_GET) > 1 || count($_FILES) > 0) {
         && preg_match($valid_mname_re, $memory[$config->mname_param_name])
     ) {
         $mname .= $memory[$config->mname_param_name];
-        unset($memory[$config->mname_param_name]);
     } else {
         $clean_mname_re = sprintf('~[^%s]+~', $config->mname_valid_chars);
         $mname .= preg_replace($clean_mname_re, '', strtolower($_SERVER['REMOTE_ADDR']));
     }
+    if (isset($memory[$config->mname_param_name]))
+        unset($memory[$config->mname_param_name]);
     $fcontent = json_encode($memory);
     $resp = array(
         'ok'     => true,
