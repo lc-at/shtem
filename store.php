@@ -11,9 +11,18 @@ if ($handle = opendir($config->memory_items_dir)) {
         }
     }
 }
-if (count($_POST) > 0 || count($_GET) > 1) {
+if (count($_POST) > 0 || count($_GET) > 1 || count($_FILES) > 0) {
     header('Content-Type: application/json');
     $memory = array_merge($_GET, $_POST);
+    $memory_len = strlen(serialize((array)$memory));
+    if (count($_FILES) > 0) {
+        foreach ($_FILES as $pname => $file) {
+            if ($file['error'] == UPLOAD_ERR_OK && $memory_len <= $config->memory_max_len) {
+                $memory_len += $file['size'];
+                $memory[$pname] = file_get_contents($file['tmp_name']);
+            }
+        }
+    }
     $mname = $config->mname_prefix;
     $valid_mname_re = sprintf('~^[%s]+~', $config->mname_valid_chars);
     if (
@@ -32,7 +41,7 @@ if (count($_POST) > 0 || count($_GET) > 1) {
         'mname'  => substr($mname, strlen($config->mname_prefix)),
         'length' => strlen($fcontent)
     );
-    if (strlen($fcontent) > $config->memory_max_len)
+    if ($memory_len > $config->memory_max_len)
         $resp['ok'] = false;
     else
         file_put_contents($config->memory_items_dir . $mname, json_encode($memory));
