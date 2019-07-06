@@ -5,7 +5,7 @@ There is actually no "intended" use case. Shtem could be used in a variety of fu
 ### How to use it?
 After you have deployed Shtem, you could use it by contacting its API endpoint from a script or by contacting it directly from a web browser. A hosted version of Shtem is available [here](https://lcat.dev/shtem) (please note that there is no uptime guarantee).
 ## Installation
-### Prequisites
+### Prerequisites
 Shtem requires a web server that supports PHP (e.g. Apache, Nginx, etc.). In some cases, PHP Development Server could also be used in development environment. For servers other than Apache, you may need to create an additional file equivalent to the `.htaccess` file.
 ### Configuration
 Shtem configuration could be done by editing `config.php` file. In some cases, `base_uri` is the only thing that needs to be changed. If you're going to use Apache, make sure that the usage of `.htaccess` is allowed.
